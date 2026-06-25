@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --erp-bg-page: #f0efec;
+  --erp-bg-shell: #f5f4f0;
+  --erp-bg-card: #ffffff;
+  --erp-bg-muted: #f8f7f5;
+  --erp-border: #d8d6cf;
+  --erp-border-subtle: #e8e6df;
+  --erp-border-inner: #f0efed;
+  --erp-text: #1a1916;
+  --erp-text-muted: #6b6960;
+  --erp-text-label: #9e9c94;
+  --erp-accent: #1a1916;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--erp-bg-page);
+  color: var(--erp-text);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d8d6cf; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #b8b6ae; }
+
+/* Card estilo ERP */
+.erp-card {
+  background-color: var(--erp-bg-card);
+  border: 1px solid var(--erp-border);
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.erp-card:hover {
+  border-color: #b8b6ae;
+}
+
+.erp-input {
+  background-color: var(--erp-bg-card);
+  border: 1px solid var(--erp-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.erp-input:focus {
+  border-color: var(--erp-text);
+  box-shadow: 0 0 0 2px rgba(26, 25, 22, 0.08);
+}
+
+/* Animaciones */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.animate-in { animation: fadeIn 0.3s ease-out; }
+.slide-in-from-right-2 { animation: slideInRight 0.2s ease-out; }
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
