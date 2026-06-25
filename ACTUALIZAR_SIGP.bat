@@ -1,10 +1,10 @@
 @echo off
-title SIGP — Actualizador
+title SIGP - Actualizador
 color 0F
 cls
 
 echo ============================================
-echo    SIGP — Actualizador v0.1
+echo    SIGP - Actualizador v0.1
 echo ============================================
 echo.
 

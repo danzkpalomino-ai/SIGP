@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title SIGP — Instalador Portable
+title SIGP - Instalador Portable
 color 0F
 
 :: Verificar privilegios de Administrador

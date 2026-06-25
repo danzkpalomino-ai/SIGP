@@ -1,11 +1,13 @@
 ' SIGP - Lanzador Invisible
-' Inicia el backend de SIGP sin mostrar ventana de consola
-Dim shell, fso, scriptPath, logPath
+' Inicia backend (3006) y frontend (5174) de SIGP sin mostrar ventanas de consola
+Dim shell, fso, projectDir
 Set shell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-scriptPath = fso.GetParentFolderName(WScript.ScriptFullName) & "\..\backend\src\index.js"
-logPath = fso.GetParentFolderName(WScript.ScriptFullName) & "\..\backend\sigp.log"
+projectDir = fso.GetParentFolderName(WScript.ScriptFullName) & "\.."
 
-' Ejecutar node en segundo plano sin ventana
-shell.Run "node.exe """ & scriptPath & """", 0, False
+' Ejecutar backend en segundo plano sin ventana
+shell.Run "cmd /c cd /d """ & projectDir & "\backend"" && npm start", 0, False
+
+' Ejecutar frontend en segundo plano sin ventana
+shell.Run "cmd /c cd /d """ & projectDir & "\frontend"" && npm run dev", 0, False
