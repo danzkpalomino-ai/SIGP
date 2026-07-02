@@ -44,7 +44,7 @@ export async function getSales(req, res) {
     if (q) { filter.$or = [{ cliente_nombre: { $regex: q, $options: 'i' } }, { cliente_dni: { $regex: q, $options: 'i' } }, { numero: { $regex: q, $options: 'i' } }]; }
     const skip = (Number(page) - 1) * Number(limit);
     const [sales, total] = await Promise.all([
-      Sale.find(filter).populate('registrado_por', 'username').skip(skip).limit(Number(limit)).sort({ creado_en: -1 }),
+      Sale.find(filter).skip(skip).limit(Number(limit)).sort({ creado_en: -1 }),
       Sale.countDocuments(filter)
     ]);
     res.json({ sales, total, page: Number(page), pages: Math.ceil(total / Number(limit)) });

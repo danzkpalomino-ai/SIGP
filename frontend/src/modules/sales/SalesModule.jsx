@@ -86,6 +86,19 @@ export default function SalesModule() {
     try { const res = await contactsApi.getByDni(dni); if (res.data) { setClienteNombre(res.data.razon_social); setClienteDni(res.data.ruc_dni) } } catch {}
   }
 
+  const handleRegisterClient = async () => {
+    if (!clienteNombre.trim() || !clienteDni.trim()) return
+    try {
+      const exists = clients.find(c => c.ruc_dni === clienteDni)
+      if (exists) { alert('El cliente ya existe'); return }
+      await contactsApi.create({ razon_social: clienteNombre.toUpperCase(), ruc_dni: clienteDni, type: 'CLIENTE' })
+      alert('Cliente registrado exitosamente')
+      loadClients()
+    } catch (err) {
+      alert('Error al registrar cliente: ' + (err.response?.data?.message || err.message))
+    }
+  }
+
   const addToCart = (product, qty = 1) => {
     setCart(prev => {
       const existing = prev.find(p => p._id === product._id)
@@ -378,7 +391,7 @@ export default function SalesModule() {
                   onChange={e => { setClienteDni(e.target.value); if (e.target.value.length >= 8) buscarClientePorDni(e.target.value) }}
                   maxLength={11} />
               </div>
-              <button className="self-end w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+              <button onClick={handleRegisterClient} className="self-end w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: 'rgba(26,26,29,0.8)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
               </button>
