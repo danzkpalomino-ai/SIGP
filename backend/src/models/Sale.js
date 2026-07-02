@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const saleItemSchema = new mongoose.Schema({
   producto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
@@ -22,17 +22,24 @@ const saleSchema = new mongoose.Schema({
   subtotal: Number,
   igv: Number,
   total: { type: Number, required: true },
-  estado: { type: String, enum: ['COMPLETADO', 'ANULADO'], default: 'COMPLETADO' },
+  estado: { type: String, enum: ['COMPLETADO', 'ANULADO', 'DEVUELTO', 'PENDIENTE'], default: 'COMPLETADO' },
+  metodo_pago: { type: String, enum: ['EFECTIVO', 'TARJETA', 'YAPE', 'PLIN', 'TRANSFERENCIA', 'OTROS'], default: 'EFECTIVO' },
   items: [saleItemSchema],
   company_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
   registrado_por: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   origen: { type: String, default: 'sigp', enum: ['sicce', 'sigp'] },
-  punto_venta: { type: String, default: 'POS-SIGP' }
+  punto_venta: { type: String, default: 'POS-SIGP' },
+  caja: { type: String, default: 'Caja 01' },
+  sync: {
+    sicce: { type: Boolean, default: false },
+    sicce_at: { type: Date }
+  }
 }, {
   timestamps: { createdAt: 'creado_en', updatedAt: 'actualizado_en' }
 });
 
 saleSchema.index({ company_id: 1, origen: 1 });
 saleSchema.index({ company_id: 1, serie: 1, numero: 1 }, { unique: true });
+saleSchema.index({ company_id: 1, 'sync.sicce': 1 });
 
-module.exports = { schema: saleSchema };
+export { saleSchema, saleItemSchema };

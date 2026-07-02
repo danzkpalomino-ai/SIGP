@@ -1,28 +1,42 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { registerModels } from './models/index.js';
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017';
-
-let cachedDb = null;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/sicce_admin';
+const tenantModelsRegistered = new Set();
 
 export async function connectDB() {
-  if (cachedDb) return cachedDb;
-  const conn = await mongoose.createConnection(MONGO_URI).asPromise();
-  console.log('[SIGP] Conectado a MongoDB');
-  cachedDb = conn;
-  return conn;
+  await mongoose.connect(MONGO_URI);
+  const host = mongoose.connection.host || 'localhost';
+  const dbName = mongoose.connection.name || 'unknown';
+  const port = mongoose.connection.port || 27017;
+  console.log(`[SIGP] MongoDB conectado exitosamente a: ${dbName} en ${host}:${port}`);
+  console.log(`[SIGP] URI: ${MONGO_URI}`);
 }
 
 export function getMainDb() {
-  if (!cachedDb) throw new Error('Base de datos no conectada');
-  return cachedDb.useDb('sicce_admin');
+  return mongoose.connection;
 }
 
 export function getTenantDb(companyId) {
-  if (!cachedDb) throw new Error('Base de datos no conectada');
+  if (!companyId) {
+    console.warn('[SIGP] company_id es null/undefined, usando main db');
+    const fallbackDb = mongoose.connection.useDb('sicce_admin', { noListener: true, useCache: true });
+    if (!tenantModelsRegistered.has('sicce_admin')) {
+      registerModels(fallbackDb);
+      tenantModelsRegistered.add('sicce_admin');
+    }
+    return fallbackDb;
+  }
   const prefix = process.env.DB_PREFIX || 'sicce_';
-  return cachedDb.useDb(`${prefix}${companyId}`);
+  const dbName = `${prefix}${companyId}`;
+  const db = mongoose.connection.useDb(dbName, { noListener: true, useCache: true });
+  if (!tenantModelsRegistered.has(dbName)) {
+    registerModels(db);
+    tenantModelsRegistered.add(dbName);
+  }
+  return db;
 }
 
 export default { connectDB, getMainDb, getTenantDb };

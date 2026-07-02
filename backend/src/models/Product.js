@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
   descripcion: { type: String, required: true, uppercase: true },
@@ -13,7 +13,9 @@ const productSchema = new mongoose.Schema({
   origen: { type: String, default: 'sigp', enum: ['sicce', 'sigp'] },
   modulo_pos: { type: String, uppercase: true },
   codigo_pos: { type: String, unique: true, sparse: true },
-  activo_pos: { type: Boolean, default: true }
+  codigo_barra: { type: String, unique: true, sparse: true },
+  activo_pos: { type: Boolean, default: true },
+  imagen: { type: String }
 }, {
   timestamps: { createdAt: 'creado_en', updatedAt: 'actualizado_en' }
 });
@@ -21,4 +23,4 @@ const productSchema = new mongoose.Schema({
 productSchema.index({ company_id: 1, codigo_pos: 1 });
 productSchema.index({ company_id: 1, modulo_pos: 1 });
 
-module.exports = { schema: productSchema };
+export { productSchema };

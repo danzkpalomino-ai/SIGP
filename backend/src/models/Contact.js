@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const contactSchema = new mongoose.Schema({
   razon_social: { type: String, required: true, uppercase: true },
@@ -15,4 +15,4 @@ const contactSchema = new mongoose.Schema({
 
 contactSchema.index({ company_id: 1, ruc_dni: 1 }, { unique: true });
 
-module.exports = { schema: contactSchema };
+export { contactSchema };

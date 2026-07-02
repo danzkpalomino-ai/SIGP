@@ -4,6 +4,69 @@ $Global:setupPath = $PSScriptRoot
 $Global:rootPath = (Resolve-Path "$Global:setupPath\..").Path
 $bannerPath = Join-Path $Global:setupPath "banner_ins.png"
 
+# --- ICONO ---
+$Win32Code = @"
+using System;
+using System.Runtime.InteropServices;
+public class Win32 {
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool DestroyIcon(IntPtr hIcon);
+}
+"@
+if (-not ([System.Management.Automation.PSTypeName]"Win32").Type) {
+    Add-Type -TypeDefinition $Win32Code
+}
+
+function Convert-PngToIco($pngPath, $icoPath) {
+    if (Test-Path $pngPath) {
+        try {
+            $bmp = [System.Drawing.Bitmap]::FromFile($pngPath)
+            $size = 64
+            if ($bmp.Width -gt $size -or $bmp.Height -gt $size) {
+                $resized = New-Object System.Drawing.Bitmap($size, $size)
+                $g = [System.Drawing.Graphics]::FromImage($resized)
+                $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+                $g.DrawImage($bmp, 0, 0, $size, $size)
+                $g.Dispose()
+                $bmp.Dispose()
+                $bmp = $resized
+            }
+            $hIcon = $bmp.GetHicon()
+            $icon = [System.Drawing.Icon]::new($hIcon, $bmp.Width, $bmp.Height)
+            $file = New-Object System.IO.FileStream($icoPath, [System.IO.FileMode]::Create)
+            $icon.Save($file)
+            $file.Close()
+            $icon.Dispose()
+            [Win32]::DestroyIcon($hIcon)
+            $bmp.Dispose()
+            return $true
+        } catch { return $false }
+    }
+    return $false
+}
+
+$Global:iconFile = "icono.ico"
+$iconPath = Join-Path $Global:setupPath $Global:iconFile
+$pngFound = $null
+foreach ($name in @("logo.png", "logoV6.png")) {
+    $test = Join-Path $Global:setupPath $name
+    if (Test-Path $test) { $pngFound = $name; break }
+}
+if ($pngFound) {
+    $icoName = [System.IO.Path]::ChangeExtension($pngFound, "ico")
+    $Global:iconFile = $icoName
+    $icoPath = Join-Path $Global:setupPath $icoName
+    if (-not (Test-Path $icoPath)) {
+        $converted = Convert-PngToIco (Join-Path $Global:setupPath $pngFound) $icoPath
+    }
+    $iconPath = $icoPath
+} else {
+    foreach ($name in @("icono.ico", "logo.ico", "logoV6.ico")) {
+        $test = Join-Path $Global:setupPath $name
+        if (Test-Path $test) { $Global:iconFile = $name; $iconPath = $test; break }
+    }
+}
+
 # --- COLORES ---
 $colorBg = [Drawing.Color]::White
 $colorSidebar = [Drawing.Color]::FromArgb(28, 18, 8)
@@ -31,6 +94,9 @@ $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
 $form.MaximizeBox = $false
 $form.BackColor = $colorBg
+if (Test-Path $iconPath) {
+    try { $form.Icon = [Drawing.Icon]::new($iconPath) } catch {}
+}
 
 # --- SIDEBAR ---
 $sidebar = New-Object Windows.Forms.Panel
@@ -479,21 +545,33 @@ $timer.Add_Tick({
             if ($Global:recrearAccesos) {
                 $txtLogs.AppendText("[$((Get-Date).ToString('HH:mm:ss'))] Creando accesos directos...`r`n")
                 $desktop = [Environment]::GetFolderPath("Desktop")
+                $srcIcon = Join-Path $Global:setupPath $Global:iconFile
+                $iconDest = Join-Path $Global:destPath "setup_wizard\$Global:iconFile"
+                if (Test-Path $srcIcon) {
+                    if (-not (Test-Path $iconDest)) {
+                        Copy-Item $srcIcon $iconDest -Force
+                        $txtLogs.AppendText("[$((Get-Date).ToString('HH:mm:ss'))] Icono copiado a destino.`r`n")
+                    }
+                }
                 $vbsContent = @"
 Set ws = CreateObject("WScript.Shell")
+Set fso = CreateObject("Scripting.FileSystemObject")
 desktop = ws.SpecialFolders("Desktop")
 wd = "$Global:destPath"
+iconPath = "$iconDest"
 
 Set s1 = ws.CreateShortcut(desktop & "\SIGP - Sistema.lnk")
 s1.TargetPath = "wscript.exe"
 s1.Arguments = Chr(34) & wd & "\bin\util_lanzador_invisible_sigp.vbs" & Chr(34)
 s1.WorkingDirectory = wd
+If fso.FileExists(iconPath) Then s1.IconLocation = iconPath & ", 0"
 s1.Save()
 
 Set s2 = ws.CreateShortcut(desktop & "\SIGP - DEBUG.lnk")
 s2.TargetPath = "cmd.exe"
 s2.Arguments = "/c " & Chr(34) & wd & "\bin\ABRIR_SIGP_DEBUG.bat" & Chr(34)
 s2.WorkingDirectory = wd
+If fso.FileExists(iconPath) Then s2.IconLocation = iconPath & ", 0"
 s2.Save()
 "@
                 $vbsFile = Join-Path $env:TEMP "crear_accesos_sigp.vbs"
@@ -514,11 +592,13 @@ s2.Save()
                     $s1.TargetPath = "wscript.exe"
                     $s1.Arguments = "`"$(Join-Path $Global:destPath "bin\util_lanzador_invisible_sigp.vbs")`""
                     $s1.WorkingDirectory = $Global:destPath
+                    if (Test-Path $iconDest) { $s1.IconLocation = "$iconDest, 0" }
                     $s1.Save()
                     $s2 = $ws.CreateShortcut("$desktop\SIGP - DEBUG.lnk")
                     $s2.TargetPath = "cmd.exe"
                     $s2.Arguments = "/c `"$(Join-Path $Global:destPath "bin\ABRIR_SIGP_DEBUG.bat")`""
                     $s2.WorkingDirectory = $Global:destPath
+                    if (Test-Path $iconDest) { $s2.IconLocation = "$iconDest, 0" }
                     $s2.Save()
                     $txtLogs.AppendText("[$((Get-Date).ToString('HH:mm:ss'))] Accesos creados via metodo directo.`r`n")
                 }

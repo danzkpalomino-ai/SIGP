@@ -13,6 +13,8 @@ api.interceptors.request.use(config => {
 export const productsApi = {
   getAll: (params) => api.get('/products', { params }),
   create: (data) => api.post('/products', data),
+  update: (id, data) => api.put(`/products/${id}`, data),
+  delete: (id) => api.delete(`/products/${id}`),
   getByCode: (code) => api.get(`/products/code/${code}`),
   getModulos: () => api.get('/products/modulos')
 }
@@ -20,18 +22,50 @@ export const productsApi = {
 export const salesApi = {
   create: (data) => api.post('/sales', data),
   getAll: (params) => api.get('/sales', { params }),
-  getToday: () => api.get('/sales/today')
+  getToday: () => api.get('/sales/today'),
+  getStats: (params) => api.get('/sales/stats', { params }),
+  getSummary: () => api.get('/sales/summary'),
+  getByProduct: (params) => api.get('/sales/by-product', { params }),
+  getStatusBreakdown: (params) => api.get('/sales/status-breakdown', { params }),
+  getHourly: (params) => api.get('/sales/hourly', { params }),
+  update: (id, data) => api.put(`/sales/${id}`, data)
 }
 
 export const purchasesApi = {
   create: (data) => api.post('/purchases', data),
-  getAll: (params) => api.get('/purchases', { params })
+  getAll: (params) => api.get('/purchases', { params }),
+  update: (id, data) => api.put(`/purchases/${id}`, data),
+  delete: (id) => api.delete(`/purchases/${id}`)
+}
+
+export const companiesApi = {
+  getAll: () => api.get('/companies'),
+  create: (data) => api.post('/companies', data),
+  update: (id, data) => api.put(`/companies/${id}`, data),
+  delete: (id) => api.delete(`/companies/${id}`)
 }
 
 export const contactsApi = {
   getAll: (params) => api.get('/contacts', { params }),
   create: (data) => api.post('/contacts', data),
+  update: (id, data) => api.put(`/contacts/${id}`, data),
+  delete: (id) => api.delete(`/contacts/${id}`),
   getByDni: (dni) => api.get(`/contacts/dni/${dni}`)
+}
+
+export const cashRegisterApi = {
+  openShift: (data) => api.post('/cash-register/shift/open', data),
+  closeShift: (id, data) => api.post(`/cash-register/shift/${id}/close`, data),
+  getCurrent: () => api.get('/cash-register/shift/current'),
+  addMovement: (id, data) => api.post(`/cash-register/shift/${id}/movement`, data),
+  getHistory: (params) => api.get('/cash-register/shift/history', { params })
+}
+
+export const syncApi = {
+  exportSales: (data) => api.post('/sync/sales/export', data),
+  getPendingCount: () => api.get('/sync/sales/pending-count'),
+  toggleAuto: (data) => api.post('/sync/sales/toggle-auto', data),
+  getAutoStatus: () => api.get('/sync/sales/auto-status'),
 }
 
 export default api

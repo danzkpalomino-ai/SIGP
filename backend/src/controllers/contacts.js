@@ -55,3 +55,31 @@ export async function getContactByDni(req, res) {
     res.status(500).json({ message: err.message });
   }
 }
+
+export async function updateContact(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Contact = db.model('Contact');
+    const contact = await Contact.findOneAndUpdate(
+      { _id: req.params.id, company_id: req.company_id },
+      { $set: req.body },
+      { new: true }
+    );
+    if (!contact) return res.status(404).json({ message: 'Contacto no encontrado' });
+    res.json(contact);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+export async function deleteContact(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Contact = db.model('Contact');
+    const contact = await Contact.findOneAndDelete({ _id: req.params.id, company_id: req.company_id });
+    if (!contact) return res.status(404).json({ message: 'Contacto no encontrado' });
+    res.json({ message: 'Contacto eliminado' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}

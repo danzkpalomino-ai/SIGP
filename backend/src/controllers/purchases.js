@@ -1,5 +1,33 @@
 import { getTenantDb } from '../db.js';
 
+export async function updatePurchase(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Purchase = db.model('Purchase');
+    const purchase = await Purchase.findOneAndUpdate(
+      { _id: req.params.id, company_id: req.company_id },
+      { $set: req.body },
+      { new: true }
+    );
+    if (!purchase) return res.status(404).json({ message: 'Compra no encontrada' });
+    res.json(purchase);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+export async function deletePurchase(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Purchase = db.model('Purchase');
+    const purchase = await Purchase.findOneAndDelete({ _id: req.params.id, company_id: req.company_id });
+    if (!purchase) return res.status(404).json({ message: 'Compra no encontrada' });
+    res.json({ message: 'Compra eliminada' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
 export async function createPurchase(req, res) {
   try {
     const db = getTenantDb(req.company_id);

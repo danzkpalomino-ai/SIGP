@@ -4,10 +4,16 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import { connectDB } from './db.js';
-import productRoutes from './routes/products.js';
-import saleRoutes from './routes/sales.js';
-import purchaseRoutes from './routes/purchases.js';
-import contactRoutes from './routes/contacts.js';
+import authRoutes from './modules/auth/routes.js';
+import configRoutes from './modules/config/routes.js';
+import catalogRoutes from './modules/catalog/routes.js';
+import salesRoutes from './modules/sales/routes.js';
+import purchaseRoutes from './modules/purchases/routes.js';
+import customerRoutes from './modules/customers/routes.js';
+import cashRoutes from './modules/cash/routes.js';
+import reportingRoutes from './modules/reporting/routes.js';
+import syncRoutes from './modules/sync/routes.js';
+import publicRoutes from './modules/public/routes.js';
 
 dotenv.config();
 
@@ -21,10 +27,16 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 // Routes
-app.use('/api/products', productRoutes);
-app.use('/api/sales', saleRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/companies', configRoutes);
+app.use('/api/products', catalogRoutes);
+app.use('/api/sales', salesRoutes);
 app.use('/api/purchases', purchaseRoutes);
-app.use('/api/contacts', contactRoutes);
+app.use('/api/contacts', customerRoutes);
+app.use('/api/cash-register', cashRoutes);
+app.use('/api/reports', reportingRoutes);
+app.use('/api/sync', syncRoutes);
+app.use('/api/public', publicRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
