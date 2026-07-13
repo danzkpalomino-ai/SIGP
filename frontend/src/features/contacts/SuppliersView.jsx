@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Search, Plus, Truck, Phone, Mail, Edit2, Trash2, X, Save, AlertCircle, Building2 } from 'lucide-react'
+import { Search, Plus, Truck, Phone, Mail, Edit2, Trash2, X, Save, AlertCircle, Building2, Download } from 'lucide-react'
 import { contactsApi } from '../../services/api'
+import ImportFromSICCEModal from '../../components/ImportFromSICCEModal'
 
 export default function SuppliersView() {
   const [suppliers, setSuppliers] = useState([])
@@ -8,6 +9,7 @@ export default function SuppliersView() {
   const [search, setSearch] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [selected, setSelected] = useState(null)
+  const [showImport, setShowImport] = useState(false)
   const [form, setForm] = useState({ razon_social: '', ruc_dni: '', telefono: '', email: '', direccion: '', type: 'PROVEEDOR' })
   const [error, setError] = useState('')
 
@@ -91,9 +93,14 @@ export default function SuppliersView() {
               <h1 className="text-lg font-black tracking-tight text-white">PROVEEDORES</h1>
               <p className="text-[11px] mt-0.5" style={{ color: '#8A8A8A' }}>{filtered.length} PROVEEDORES REGISTRADOS</p>
             </div>
-            <button onClick={handleCreate} className="btn-relief-accent flex items-center gap-2 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider">
-              <Plus size={14} /> Crear Nuevo
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setShowImport(true)} className="btn-relief flex items-center gap-2 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider" style={{ color: '#F56B13' }}>
+                <Download size={14} /> Importar SICCE
+              </button>
+              <button onClick={handleCreate} className="btn-relief-accent flex items-center gap-2 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider">
+                <Plus size={14} /> Crear Nuevo
+              </button>
+            </div>
           </div>
           <div className="relative max-w-md">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#5A5A5A' }} />
@@ -214,6 +221,10 @@ export default function SuppliersView() {
             </div>
           </div>
         </div>
+      )}
+
+      {showImport && (
+        <ImportFromSICCEModal onClose={() => { setShowImport(false); loadSuppliers() }} initialTab="proveedores" />
       )}
     </div>
   )

@@ -10,4 +10,8 @@ router.post('/', ctrl.createCompany);
 router.put('/:id', ctrl.updateCompany);
 router.delete('/:id', ctrl.deleteCompany);
 
+router.get('/puntos-venta', ctrl.getPuntosVenta);
+router.post('/puntos-venta', ctrl.createPuntoVenta);
+router.delete('/puntos-venta/:id', ctrl.deletePuntoVenta);
+
 export default router;

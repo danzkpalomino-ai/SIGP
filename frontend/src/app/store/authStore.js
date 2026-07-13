@@ -5,6 +5,7 @@ export const useAuthStore = create((set) => ({
   token: null,
   company: null,
   puntoVenta: null,
+  puntoVentaId: null,
   companies: [],
   isAuthenticated: false,
 
@@ -19,14 +20,15 @@ export const useAuthStore = create((set) => ({
     set({ company })
   },
 
-  setPuntoVenta: (pv) => {
+  setPuntoVenta: (pv, pvId) => {
     sessionStorage.setItem('puntoVenta', pv)
-    set({ puntoVenta: pv })
+    if (pvId) sessionStorage.setItem('puntoVentaId', pvId)
+    set({ puntoVenta: pv, puntoVentaId: pvId || null })
   },
 
   logout: () => {
     sessionStorage.clear()
-    set({ user: null, token: null, company: null, puntoVenta: null, companies: [], isAuthenticated: false })
+    set({ user: null, token: null, company: null, puntoVenta: null, puntoVentaId: null, companies: [], isAuthenticated: false })
   },
 
   hydrate: () => {
@@ -35,7 +37,8 @@ export const useAuthStore = create((set) => ({
       const user = JSON.parse(sessionStorage.getItem('user') || 'null')
       const company = JSON.parse(sessionStorage.getItem('company') || 'null')
       const puntoVenta = sessionStorage.getItem('puntoVenta')
-      if (token && user) set({ user, token, company, puntoVenta, isAuthenticated: true })
+      const puntoVentaId = sessionStorage.getItem('puntoVentaId')
+      if (token && user) set({ user, token, company, puntoVenta, puntoVentaId, isAuthenticated: true })
     } catch {}
   }
 }))

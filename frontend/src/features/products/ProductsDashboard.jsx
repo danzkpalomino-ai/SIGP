@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import { Search, Plus, Edit2, Trash2, Package, Save, X, Phone, Mail, Clock, TrendingUp, BarChart3, User, AlertCircle, Barcode, FileText, Image } from 'lucide-react'
-import { productsApi, salesApi, contactsApi } from '../../services/api'
+import { Search, Plus, Edit2, Trash2, Package, Save, X, Phone, Mail, Clock, TrendingUp, BarChart3, User, AlertCircle, Barcode, FileText, Image, Database } from 'lucide-react'
+import { productsApi, salesApi, contactsApi, syncApi } from '../../services/api'
 import BarcodeLabel from '../../components/BarcodeLabel'
 import CodigoAltaModal from '../../components/CodigoAltaModal'
+import ImportFromSICCEModal from '../../components/ImportFromSICCEModal'
 
 export default function ProductsDashboard({ company }) {
   const [products, setProducts] = useState(() => {
@@ -24,6 +25,7 @@ export default function ProductsDashboard({ company }) {
   const [form, setForm] = useState({ descripcion: '', precio_unitario: '', categoria: '', marca: '', stock_actual: '', imagen: '' })
   const [error, setError] = useState('')
   const [showCodigoAlta, setShowCodigoAlta] = useState(false)
+  const [showImport, setShowImport] = useState(false)
   const [showDrawer, setShowDrawer] = useState(false)
   const fileInputRef = useRef(null)
 
@@ -131,6 +133,9 @@ export default function ProductsDashboard({ company }) {
           <div className="flex items-center gap-2">
             <button onClick={() => setShowCodigoAlta(true)} className="btn-relief-outline flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider">
               <FileText size={13} /> Dar alta codigos
+            </button>
+            <button onClick={() => setShowImport(true)} className="btn-relief-outline flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider" style={{ color: '#10B981', borderColor: 'rgba(16,185,129,0.3)' }}>
+              <Database size={13} /> Importar SICCE
             </button>
             <button onClick={handleCreate} className="btn-relief-accent flex items-center gap-1.5 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider">
               <Plus size={14} /> Crear Nuevo
@@ -285,6 +290,10 @@ export default function ProductsDashboard({ company }) {
           </div>
         </div>
       </div>
+
+      {showImport && (
+        <ImportFromSICCEModal onClose={() => { setShowImport(false); loadProducts() }} />
+      )}
 
       {showCodigoAlta && (
         <CodigoAltaModal products={products.filter(p => p.codigo_barra)} company={company} onClose={() => setShowCodigoAlta(false)} />

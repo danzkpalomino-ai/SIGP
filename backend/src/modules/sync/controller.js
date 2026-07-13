@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { getTenantDb } from '../../db.js';
 import Company from '../../models/Company.js';
 
@@ -40,6 +41,125 @@ export async function syncImportProducts(req, res) {
       }
     }
     res.json({ imported, updated, total: products.length });
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
+export async function syncImportPreview(req, res) {
+  try {
+    const company = await Company.findById(req.company_id);
+    const erpDbName = company?.tenantDbName || `erp_${req.company_id}`;
+    const erpDb = mongoose.connection.client.db(erpDbName);
+    const { page = 1, limit = 100 } = req.query;
+    const skip = (Number(page) - 1) * Number(limit);
+    const filter = { item_type: 'PRODUCTO' };
+    const [products, total] = await Promise.all([
+      erpDb.collection('products').find(filter).skip(skip).limit(Number(limit)).sort({ descripcion: 1 }).toArray(),
+      erpDb.collection('products').countDocuments(filter)
+    ]);
+    const mapped = products.map(p => ({
+      _id: p._id.toString(),
+      descripcion: p.descripcion,
+      stock_actual: p.stock_actual || 0,
+      precio_unitario: p.costo_unitario || p.precio_unitario || 0,
+      marca: p.marca_coleccion || '',
+      categoria: p.categoria_mercaderia || ''
+    }));
+    res.json({ products: mapped, total, page: Number(page), pages: Math.ceil(total / Number(limit)), limit: Number(limit) });
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
+export async function syncImportConfirm(req, res) {
+  try {
+    const company = await Company.findById(req.company_id);
+    const erpDbName = company?.tenantDbName || `erp_${req.company_id}`;
+    const erpDb = mongoose.connection.client.db(erpDbName);
+    const sigpDb = getTenantDb(req.company_id);
+    const Product = sigpDb.model('Product');
+    const { product_ids } = req.body;
+    if (!product_ids || !Array.isArray(product_ids) || product_ids.length === 0) {
+      return res.status(400).json({ message: 'Seleccione al menos un producto' });
+    }
+    let imported = 0, skipped = 0;
+    for (const id of product_ids) {
+      const sicceProduct = await erpDb.collection('products').findOne({ _id: new mongoose.Types.ObjectId(id) });
+      if (!sicceProduct) continue;
+      const exists = await Product.findOne({ company_id: req.company_id, origen: 'sigp', descripcion: sicceProduct.descripcion });
+      if (exists) { skipped++; continue; }
+      const count = await Product.countDocuments({ company_id: req.company_id, origen: 'sigp' });
+      const codigoPos = `SIC-${String(count + 1).padStart(5, '0')}`;
+      await Product.create({
+        descripcion: sicceProduct.descripcion,
+        marca: sicceProduct.marca_coleccion || '',
+        categoria: sicceProduct.categoria_mercaderia || '',
+        stock_actual: sicceProduct.stock_actual || 0,
+        precio_unitario: sicceProduct.costo_unitario || sicceProduct.precio_unitario || 0,
+        item_type: 'PRODUCTO',
+        codigo_pos: codigoPos,
+        activo_pos: true,
+        origen: 'sigp',
+        company_id: req.company_id
+      });
+      imported++;
+    }
+    res.json({ imported, skipped, total: product_ids.length });
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
+export async function syncImportContactsPreview(req, res) {
+  try {
+    const company = await Company.findById(req.company_id);
+    const erpDbName = company?.tenantDbName || `erp_${req.company_id}`;
+    const erpDb = mongoose.connection.client.db(erpDbName);
+    const { page = 1, limit = 100, type = 'CLIENTE' } = req.query;
+    const skip = (Number(page) - 1) * Number(limit);
+    const filter = { type };
+    const [contacts, total] = await Promise.all([
+      erpDb.collection('contacts').find(filter).skip(skip).limit(Number(limit)).sort({ razon_social: 1 }).toArray(),
+      erpDb.collection('contacts').countDocuments(filter)
+    ]);
+    const mapped = contacts.map(c => ({
+      _id: c._id.toString(),
+      razon_social: c.razon_social,
+      ruc_dni: c.ruc_dni,
+      direccion: c.direccion || '',
+      telefono: c.telefono || '',
+      email: c.email || '',
+      type: c.type
+    }));
+    res.json({ contacts: mapped, total, page: Number(page), pages: Math.ceil(total / Number(limit)), limit: Number(limit) });
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
+export async function syncImportContactsConfirm(req, res) {
+  try {
+    const company = await Company.findById(req.company_id);
+    const erpDbName = company?.tenantDbName || `erp_${req.company_id}`;
+    const erpDb = mongoose.connection.client.db(erpDbName);
+    const sigpDb = getTenantDb(req.company_id);
+    const Contact = sigpDb.model('Contact');
+    const { contact_ids, type } = req.body;
+    if (!contact_ids || !Array.isArray(contact_ids) || contact_ids.length === 0) {
+      return res.status(400).json({ message: 'Seleccione al menos un contacto' });
+    }
+    let imported = 0, skipped = 0;
+    for (const id of contact_ids) {
+      const sicceContact = await erpDb.collection('contacts').findOne({ _id: new mongoose.Types.ObjectId(id) });
+      if (!sicceContact) continue;
+      const exists = await Contact.findOne({ company_id: req.company_id, origen: 'sigp', ruc_dni: sicceContact.ruc_dni });
+      if (exists) { skipped++; continue; }
+      await Contact.create({
+        razon_social: sicceContact.razon_social,
+        ruc_dni: sicceContact.ruc_dni,
+        type: type || sicceContact.type,
+        direccion: sicceContact.direccion,
+        telefono: sicceContact.telefono,
+        email: sicceContact.email,
+        origen: 'sigp',
+        company_id: req.company_id
+      });
+      imported++;
+    }
+    res.json({ imported, skipped, total: contact_ids.length });
   } catch (err) { res.status(500).json({ message: err.message }); }
 }
 

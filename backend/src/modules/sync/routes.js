@@ -12,5 +12,9 @@ router.post('/sales/export', ctrl.syncExportSales);
 router.get('/sales/pending-count', ctrl.syncPendingCount);
 router.post('/sales/toggle-auto', ctrl.syncToggleAuto);
 router.get('/sales/auto-status', ctrl.syncGetAutoStatus);
+router.get('/import/preview', ctrl.syncImportPreview);
+router.post('/import/confirm', ctrl.syncImportConfirm);
+router.get('/import/contacts-preview', ctrl.syncImportContactsPreview);
+router.post('/import/contacts-confirm', ctrl.syncImportContactsConfirm);
 
 export default router;

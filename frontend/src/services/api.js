@@ -56,9 +56,10 @@ export const contactsApi = {
 export const cashRegisterApi = {
   openShift: (data) => api.post('/cash-register/shift/open', data),
   closeShift: (id, data) => api.post(`/cash-register/shift/${id}/close`, data),
-  getCurrent: () => api.get('/cash-register/shift/current'),
+  getCurrent: (params) => api.get('/cash-register/shift/current', { params }),
   addMovement: (id, data) => api.post(`/cash-register/shift/${id}/movement`, data),
-  getHistory: (params) => api.get('/cash-register/shift/history', { params })
+  getHistory: (params) => api.get('/cash-register/shift/history', { params }),
+  getSummary: (id) => api.get(`/cash-register/shift/${id}/summary`),
 }
 
 export const syncApi = {
@@ -66,6 +67,22 @@ export const syncApi = {
   getPendingCount: () => api.get('/sync/sales/pending-count'),
   toggleAuto: (data) => api.post('/sync/sales/toggle-auto', data),
   getAutoStatus: () => api.get('/sync/sales/auto-status'),
+  getImportPreview: (params) => api.get('/sync/import/preview', { params }),
+  confirmImport: (data) => api.post('/sync/import/confirm', data),
+  getImportContactsPreview: (params) => api.get('/sync/import/contacts-preview', { params }),
+  confirmImportContacts: (data) => api.post('/sync/import/contacts-confirm', data),
+}
+
+export const reportsApi = {
+  getDashboard: () => api.get('/reports/dashboard'),
+  getHistory: (params) => api.get('/reports/history', { params }),
+  getSummary: (params) => api.get('/reports/summary', { params }),
+}
+
+export const puntosVentaApi = {
+  getAll: () => api.get('/companies/puntos-venta'),
+  create: (data) => api.post('/companies/puntos-venta', data),
+  delete: (id) => api.delete(`/companies/puntos-venta/${id}`),
 }
 
 export const quotationsApi = {

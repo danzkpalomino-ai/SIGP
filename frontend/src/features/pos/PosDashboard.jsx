@@ -3,7 +3,7 @@ import { DollarSign, Clock, TrendingUp, BarChart3, X, CheckCircle, AlertCircle, 
 import { cashRegisterApi, salesApi } from '../../services/api'
 import jsPDF from 'jspdf'
 
-export default function PosDashboard({ company, user, puntoVenta, onLogout, onSwitchCompany, companies, simplified }) {
+export default function PosDashboard({ company, user, puntoVenta, puntoVentaId, onLogout, onSwitchCompany, companies, simplified }) {
   const [shift, setShift] = useState(null)
   const [todayData, setTodayData] = useState({ total: 0, count: 0 })
   const [loading, setLoading] = useState(true)
@@ -20,12 +20,15 @@ export default function PosDashboard({ company, user, puntoVenta, onLogout, onSw
   const [notas, setNotas] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
 
-  useEffect(() => { loadData() }, [])
+  useEffect(() => { loadData() }, [puntoVenta])
 
   const loadData = async () => {
     setLoading(true)
     try {
-      const res = await cashRegisterApi.getCurrent()
+      const params = {}
+      if (puntoVentaId) params.punto_venta_id = puntoVentaId
+      else if (puntoVenta) params.punto_venta_nombre = puntoVenta
+      const res = await cashRegisterApi.getCurrent(params)
       setShift(res.data.shift)
       setTodayData(res.data.todaySales)
     } catch {} finally { setLoading(false) }
@@ -33,7 +36,10 @@ export default function PosDashboard({ company, user, puntoVenta, onLogout, onSw
 
   const handleOpenShift = async () => {
     try {
-      const res = await cashRegisterApi.openShift({ monto_inicial: parseFloat(montoInicial) || 0, notas: notas.toUpperCase() })
+      const data = { monto_inicial: parseFloat(montoInicial) || 0, notas: notas.toUpperCase() }
+      if (puntoVentaId) data.punto_venta_id = puntoVentaId
+      if (puntoVenta) data.punto_venta_nombre = puntoVenta
+      const res = await cashRegisterApi.openShift(data)
       setShift(res.data)
       setShowOpenShift(false)
       setMontoInicial('')
@@ -49,8 +55,8 @@ export default function PosDashboard({ company, user, puntoVenta, onLogout, onSw
       setShift(res.data)
       setShowCloseShift(false)
       setMontoFinal('')
-      setSuccessMsg('TURNO CERRADO')
-      setTimeout(() => setSuccessMsg(''), 3000)
+      setSuccessMsg('TURNO CERRADO — ' + (res.data.diferencia !== 0 ? 'DIF: S/ ' + (res.data.diferencia||0).toFixed(2) : 'SIN DIFERENCIA'))
+      setTimeout(() => setSuccessMsg(''), 4000)
     } catch (err) { alert(err.response?.data?.message || err.message) }
   }
 

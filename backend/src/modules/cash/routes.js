@@ -10,5 +10,6 @@ router.post('/shift/:id/close', ctrl.closeShift);
 router.get('/shift/current', ctrl.getCurrentShift);
 router.post('/shift/:id/movement', ctrl.addMovement);
 router.get('/shift/history', ctrl.getShiftHistory);
+router.get('/shift/:id/summary', ctrl.getShiftSummary);
 
 export default router;

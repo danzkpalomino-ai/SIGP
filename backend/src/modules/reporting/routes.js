@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { getDashboardStats } from './controller.js';
+import * as ctrl from './controller.js';
 import { authMiddleware } from '../../middleware/auth.js';
 
 const router = Router();
 router.use(authMiddleware);
 
-router.get('/dashboard', getDashboardStats);
+router.get('/dashboard', ctrl.getDashboardStats);
+router.get('/history', ctrl.getReportHistory);
+router.get('/summary', ctrl.getReportSummary);
 
 export default router;

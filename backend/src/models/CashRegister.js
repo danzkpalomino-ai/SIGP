@@ -19,12 +19,15 @@ const shiftSchema = new mongoose.Schema({
   cierre: { type: Date },
   ventas_total: { type: Number, default: 0 },
   ventas_count: { type: Number, default: 0 },
+  punto_venta_id: { type: mongoose.Schema.Types.ObjectId, ref: 'PuntoVenta' },
+  punto_venta_nombre: { type: String },
   movimientos: [cashMovementSchema],
   company_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
   notas: { type: String, uppercase: true }
 }, { timestamps: { createdAt: 'creado_en', updatedAt: 'actualizado_en' } });
 
 shiftSchema.index({ company_id: 1, estado: 1 });
+shiftSchema.index({ company_id: 1, punto_venta_id: 1, estado: 1 });
 shiftSchema.index({ company_id: 1, apertura: -1 });
 
 export { shiftSchema, cashMovementSchema };
