@@ -68,4 +68,10 @@ export const syncApi = {
   getAutoStatus: () => api.get('/sync/sales/auto-status'),
 }
 
+export const quotationsApi = {
+  create: (data) => api.post('/sales/quotations', data),
+  getAll: (params) => api.get('/sales/quotations', { params }),
+  convertToSale: (id, data) => api.put(`/sales/quotations/${id}/convert`, data)
+}
+
 export default api

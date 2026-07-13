@@ -39,7 +39,7 @@ function DonutChart({ breakdown }) {
         }} />
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-xl font-black text-white">{breakdown?.total || 0}</span>
-          <span className="text-[9px] font-bold" style={{ color: '#5A5A5A' }}>Ventas</span>
+          <span className="text-[10.5px] font-bold" style={{ color: '#5A5A5A' }}>Ventas</span>
         </div>
       </div>
       <div className="space-y-1.5 flex-1">
@@ -47,11 +47,11 @@ function DonutChart({ breakdown }) {
           <div key={i} className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-sm" style={{ background: s.color }} />
-              <span className="text-[10px] font-bold" style={{ color: '#CCC' }}>{s.label}</span>
+              <span className="text-[11.5px] font-bold" style={{ color: '#CCC' }}>{s.label}</span>
             </div>
             <div className="text-right">
-              <span className="text-[10px] font-black text-white">{s.pct.toFixed(1)}%</span>
-              <span className="text-[9px] font-bold ml-1" style={{ color: '#5A5A5A' }}>/ {formatCurrency(s.total)}</span>
+              <span className="text-[11.5px] font-black text-white">{s.pct.toFixed(1)}%</span>
+              <span className="text-[10.5px] font-bold ml-1" style={{ color: '#5A5A5A' }}>/ {formatCurrency(s.total)}</span>
             </div>
           </div>
         ))}
@@ -237,7 +237,7 @@ export default function SalesHistory() {
       <div className="px-5 pt-4 pb-2 flex items-center justify-between shrink-0">
         <div>
           <h1 className="text-sm font-black text-white uppercase tracking-wider">Registro de Ventas</h1>
-          <p className="text-[9px] font-bold" style={{ color: '#5A5A5A' }}>Consulta y gestion de todas las ventas realizadas</p>
+          <p className="text-[10.5px] font-bold" style={{ color: '#5A5A5A' }}>Consulta y gestion de todas las ventas realizadas</p>
         </div>
       </div>
 
@@ -256,14 +256,14 @@ export default function SalesHistory() {
                       <Icon size={16} style={{ color: s.color }} />
                     </div>
                   </div>
-                  <p className="text-[7px] font-bold uppercase tracking-wider" style={{ color: '#5A5A5A' }}>{s.label}</p>
+                  <p className="text-[8.5px] font-bold uppercase tracking-wider" style={{ color: '#5A5A5A' }}>{s.label}</p>
                   <p className="text-sm font-black text-white mt-0.5">{s.value}</p>
                   <div className="flex items-center gap-1 mt-1">
                     {isNeg ? <ArrowDownRight size={9} style={{ color: '#EF4444' }} /> : <ArrowUpRight size={9} style={{ color: '#10B981' }} />}
-                    <span className="text-[9px] font-black" style={{ color: isNeg ? '#EF4444' : '#10B981' }}>
+                    <span className="text-[10.5px] font-black" style={{ color: isNeg ? '#EF4444' : '#10B981' }}>
                       {Math.abs(s.change).toFixed(1)}%
                     </span>
-                    <span className="text-[9px] font-bold" style={{ color: '#5A5A5A' }}>vs ayer</span>
+                    <span className="text-[10.5px] font-bold" style={{ color: '#5A5A5A' }}>vs ayer</span>
                   </div>
                 </div>
               )
@@ -274,31 +274,31 @@ export default function SalesHistory() {
           <div className="rounded-xl border p-3 shrink-0" style={{ background: '#111113', borderColor: '#2A2A2E' }}>
             <div className="flex items-center gap-2 mb-2">
               <Filter size={10} style={{ color: '#F56B13' }} />
-              <span className="text-[8px] font-black uppercase tracking-wider" style={{ color: '#8A8A8A' }}>Filtros de Busqueda</span>
+              <span className="text-[9.5px] font-black uppercase tracking-wider" style={{ color: '#8A8A8A' }}>Filtros de Busqueda</span>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <div className="flex items-center gap-1.5 border rounded-lg px-2 py-1.5" style={{ borderColor: '#2A2A2E' }}>
                 <Calendar size={11} style={{ color: '#5A5A5A' }} />
                 <input type="date" value={filters.fecha_desde} onChange={e => { setFilters(f => ({...f, fecha_desde: e.target.value})); setPage(1) }}
-                  className="text-[9px] bg-transparent text-white outline-none w-[90px]" style={{ colorScheme: 'dark' }} />
-                <span className="text-[7px] font-bold" style={{ color: '#5A5A5A' }}>-</span>
+                  className="text-[10.5px] bg-transparent text-white outline-none w-[90px]" style={{ colorScheme: 'dark' }} />
+                <span className="text-[8.5px] font-bold" style={{ color: '#5A5A5A' }}>-</span>
                 <input type="date" value={filters.fecha_hasta} onChange={e => { setFilters(f => ({...f, fecha_hasta: e.target.value})); setPage(1) }}
-                  className="text-[9px] bg-transparent text-white outline-none w-[90px]" style={{ colorScheme: 'dark' }} />
+                  className="text-[10.5px] bg-transparent text-white outline-none w-[90px]" style={{ colorScheme: 'dark' }} />
               </div>
               <select value={filters.punto_venta} onChange={e => { setFilters(f => ({...f, punto_venta: e.target.value})); setPage(1) }}
-                className="text-[9px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
+                className="text-[10.5px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
                 <option value="">Todas las tiendas</option>
                 <option value="POS-SIGP">POS-SIGP</option>
               </select>
               <select value={filters.caja} onChange={e => { setFilters(f => ({...f, caja: e.target.value})); setPage(1) }}
-                className="text-[9px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
+                className="text-[10.5px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
                 <option value="">Todas las cajas</option>
                 <option value="Caja 01">Caja 01</option>
                 <option value="Caja 02">Caja 02</option>
                 <option value="Caja 03">Caja 03</option>
               </select>
               <select value={filters.estado} onChange={e => { setFilters(f => ({...f, estado: e.target.value})); setPage(1) }}
-                className="text-[9px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
+                className="text-[10.5px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
                 <option value="">Todos</option>
                 <option value="COMPLETADO">Completada</option>
                 <option value="ANULADO">Anulada</option>
@@ -306,7 +306,7 @@ export default function SalesHistory() {
                 <option value="PENDIENTE">Pendiente</option>
               </select>
               <select value={filters.tipo_documento} onChange={e => { setFilters(f => ({...f, tipo_documento: e.target.value})); setPage(1) }}
-                className="text-[9px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
+                className="text-[10.5px] px-2 py-1.5 rounded-lg border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B' }}>
                 <option value="">Todos</option>
                 <option value="01">Factura</option>
                 <option value="03">Boleta</option>
@@ -316,20 +316,20 @@ export default function SalesHistory() {
                 <Search size={11} style={{ color: '#5A5A5A' }} />
                 <input type="text" placeholder="Buscar por N° venta, cliente, DNI..." value={filters.q}
                   onChange={e => { setFilters(f => ({...f, q: e.target.value})); setPage(1) }}
-                  className="text-[9px] bg-transparent text-white outline-none flex-1 placeholder:text-[#5A5A5A]" />
+                  className="text-[10.5px] bg-transparent text-white outline-none flex-1 placeholder:text-[#5A5A5A]" />
               </div>
             </div>
             <div className="flex items-center justify-between mt-2">
-              <button className="text-[8px] font-bold flex items-center gap-1 hover:text-white transition-colors" style={{ color: '#F56B13' }}>
+              <button className="text-[9.5px] font-bold flex items-center gap-1 hover:text-white transition-colors" style={{ color: '#F56B13' }}>
                 <Filter size={9} /> Mas filtros
               </button>
               <div className="flex items-center gap-2">
                 {hasFilters && (
-                  <button onClick={clearFilters} className="text-[8px] font-bold px-3 py-1.5 rounded-lg border hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
+                  <button onClick={clearFilters} className="text-[9.5px] font-bold px-3 py-1.5 rounded-lg border hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
                     Limpiar
                   </button>
                 )}
-                <button onClick={() => setPage(1)} className="text-[8px] font-bold px-3 py-1.5 rounded-lg transition-all" style={{ background: '#F56B13', color: '#FFF' }}>
+                <button onClick={() => setPage(1)} className="text-[9.5px] font-bold px-3 py-1.5 rounded-lg transition-all" style={{ background: '#F56B13', color: '#FFF' }}>
                   Buscar
                 </button>
               </div>
@@ -341,7 +341,7 @@ export default function SalesHistory() {
             <div className="relative">
               <button
                 onClick={() => { setShowSyncDropdown(!showSyncDropdown); if (!showSyncDropdown) setSelectedIds(new Set()) }}
-                className="text-[9px] font-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all"
+                className="text-[10.5px] font-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all"
                 style={{ background: '#F56B13', color: '#FFF' }}
               >
                 <Upload size={12} /> Enviar a SICCE
@@ -360,7 +360,7 @@ export default function SalesHistory() {
                         if (opt.modo === 'fecha') { setShowDateModal(true); setShowSyncDropdown(false) }
                         else handleExport(opt.modo)
                       }} disabled={opt.disabled}
-                        className="w-full text-left px-3 py-2.5 text-[9px] font-bold transition-all hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="w-full text-left px-3 py-2.5 text-[10.5px] font-bold transition-all hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed"
                         style={{ color: opt.disabled ? '#3A3A3E' : '#CCC', borderBottom: i < 3 ? '1px solid #2A2A2E' : 'none' }}>
                         {opt.label}
                       </button>
@@ -373,7 +373,7 @@ export default function SalesHistory() {
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => { const next = !autoStatus?.auto_sync_sicce; toggleAutoMutation.mutate(next) }}
-                className={`text-[9px] font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border transition-all ${autoStatus?.auto_sync_sicce ? '' : 'opacity-50'}`}
+                className={`text-[10.5px] font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border transition-all ${autoStatus?.auto_sync_sicce ? '' : 'opacity-50'}`}
                 style={{ borderColor: '#2A2A2E', color: autoStatus?.auto_sync_sicce ? '#10B981' : '#5A5A5A' }}
               >
                 {autoStatus?.auto_sync_sicce ? <Cloud size={12} /> : <CloudOff size={12} />}
@@ -383,13 +383,13 @@ export default function SalesHistory() {
 
             <div className="flex items-center gap-2 flex-1">
               {pendingData && pendingData.pending > 0 && (
-                <button onClick={() => refetchPending()} className="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-lg hover:bg-white/5 transition-all" style={{ color: '#F59E0B' }}>
+                <button onClick={() => refetchPending()} className="flex items-center gap-1 text-[9.5px] font-bold px-2 py-1 rounded-lg hover:bg-white/5 transition-all" style={{ color: '#F59E0B' }}>
                   <AlertCircle size={10} />
                   {pendingData.pending} pendientes
                 </button>
               )}
               {pendingData && pendingData.synced > 0 && (
-                <span className="flex items-center gap-1 text-[8px] font-bold" style={{ color: '#5A5A5A' }}>
+                <span className="flex items-center gap-1 text-[9.5px] font-bold" style={{ color: '#5A5A5A' }}>
                   <CheckCircle2 size={10} style={{ color: '#10B981' }} />
                   {pendingData.synced} enviados
                 </span>
@@ -397,15 +397,15 @@ export default function SalesHistory() {
             </div>
 
             {hasSelected && (
-              <span className="text-[8px] font-bold" style={{ color: '#F56B13' }}>{selectedIds.size} seleccionadas</span>
+              <span className="text-[9.5px] font-bold" style={{ color: '#F56B13' }}>{selectedIds.size} seleccionadas</span>
             )}
             {syncError && (
-              <span className="text-[8px] font-bold flex items-center gap-1" style={{ color: '#EF4444' }}>
+              <span className="text-[9.5px] font-bold flex items-center gap-1" style={{ color: '#EF4444' }}>
                 <AlertCircle size={10} /> {syncError}
               </span>
             )}
             {syncStatus && (
-              <span className="text-[8px] font-bold flex items-center gap-1" style={{ color: exportMutation.isLoading ? '#F56B13' : '#10B981' }}>
+              <span className="text-[9.5px] font-bold flex items-center gap-1" style={{ color: exportMutation.isLoading ? '#F56B13' : '#10B981' }}>
                 {exportMutation.isLoading ? <RefreshCw size={10} className="animate-spin" /> : <CheckCircle2 size={10} />}
                 {syncStatus}
               </span>
@@ -415,12 +415,12 @@ export default function SalesHistory() {
           {/* Table */}
           <div className="flex-1 rounded-xl border overflow-hidden flex flex-col" style={{ background: '#111113', borderColor: '#2A2A2E' }}>
             <div className="px-4 py-2.5 border-b flex items-center justify-between" style={{ borderColor: '#2A2A2E' }}>
-              <h3 className="text-[10px] font-black text-white uppercase tracking-wider">Listado de Ventas</h3>
+              <h3 className="text-[11.5px] font-black text-white uppercase tracking-wider">Listado de Ventas</h3>
               <div className="flex items-center gap-2">
-                <button className="text-[8px] font-bold px-2.5 py-1.5 rounded-lg border flex items-center gap-1.5 hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
+                <button className="text-[9.5px] font-bold px-2.5 py-1.5 rounded-lg border flex items-center gap-1.5 hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
                   <Download size={10} /> Exportar
                 </button>
-                <button onClick={() => queryClient.invalidateQueries(['salesList'])} className="text-[8px] font-bold px-2.5 py-1.5 rounded-lg border flex items-center gap-1.5 hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
+                <button onClick={() => queryClient.invalidateQueries(['salesList'])} className="text-[9.5px] font-bold px-2.5 py-1.5 rounded-lg border flex items-center gap-1.5 hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
                   <RefreshCw size={10} /> Actualizar
                 </button>
               </div>
@@ -432,7 +432,7 @@ export default function SalesHistory() {
                     {HEADER_COLS.map((col, i) => {
                       const isCheck = i === 0 && showCheckboxes
                       return (
-                        <th key={i} className={`px-3 py-2 text-[7px] font-bold uppercase tracking-wider ${col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'}`}
+                        <th key={i} className={`px-3 py-2 text-[8.5px] font-bold uppercase tracking-wider ${col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'}`}
                           style={{ color: '#5A5A5A', width: col.width || undefined }}>
                           {isCheck ? (
                             <input type="checkbox" checked={data?.sales && selectedIds.size === data.sales.length && data.sales.length > 0}
@@ -450,9 +450,9 @@ export default function SalesHistory() {
                 </thead>
                 <tbody>
                   {isLoading ? (
-                    <tr><td colSpan={HEADER_COLS.length} className="text-center py-8 text-[10px] font-bold" style={{ color: '#5A5A5A' }}>Cargando ventas...</td></tr>
+                    <tr><td colSpan={HEADER_COLS.length} className="text-center py-8 text-[11.5px] font-bold" style={{ color: '#5A5A5A' }}>Cargando ventas...</td></tr>
                   ) : data?.sales?.length === 0 ? (
-                    <tr><td colSpan={HEADER_COLS.length} className="text-center py-8 text-[10px] font-bold" style={{ color: '#5A5A5A' }}>No se encontraron ventas</td></tr>
+                    <tr><td colSpan={HEADER_COLS.length} className="text-center py-8 text-[11.5px] font-bold" style={{ color: '#5A5A5A' }}>No se encontraron ventas</td></tr>
                   ) : data?.sales?.map(sale => {
                     const es = ESTADO_COLORS[sale.estado] || ESTADO_COLORS.COMPLETADO
                     const synced = sale.sync?.sicce
@@ -465,47 +465,47 @@ export default function SalesHistory() {
                           </td>
                         )}
                         <td className="px-3 py-2.5">
-                          <span className="text-[9px] font-black underline cursor-pointer" style={{ color: '#F56B13' }}>
+                          <span className="text-[10.5px] font-black underline cursor-pointer" style={{ color: '#F56B13' }}>
                             VTA-{String(sale.correlativo).padStart(7, '0')}
                           </span>
                         </td>
                         <td className="px-3 py-2.5">
-                          <p className="text-[9px] font-bold text-white">{formatDate(sale.fecha_emision)}</p>
-                          <p className="text-[9px] font-bold" style={{ color: '#5A5A5A' }}>{sale.creado_en ? formatTime(new Date(sale.creado_en)) : ''}</p>
+                          <p className="text-[10.5px] font-bold text-white">{formatDate(sale.fecha_emision)}</p>
+                          <p className="text-[10.5px] font-bold" style={{ color: '#5A5A5A' }}>{sale.creado_en ? formatTime(new Date(sale.creado_en)) : ''}</p>
                         </td>
                         <td className="px-3 py-2.5">
-                          <span className="text-[9px] font-bold text-white">{sale.punto_venta || '-'}</span>
+                          <span className="text-[10.5px] font-bold text-white">{sale.punto_venta || '-'}</span>
                         </td>
                         <td className="px-3 py-2.5">
-                          <span className="text-[9px] font-bold text-white">{sale.caja || '-'}</span>
+                          <span className="text-[10.5px] font-bold text-white">{sale.caja || '-'}</span>
                         </td>
                         <td className="px-3 py-2.5">
-                          <span className="text-[9px] font-bold text-white">{sale.registrado_por?.username || '-'}</span>
+                          <span className="text-[10.5px] font-bold text-white">{sale.registrado_por?.username || '-'}</span>
                         </td>
                         <td className="px-3 py-2.5">
-                          <p className="text-[9px] font-bold text-white">{(sale.cliente_nombre || 'CLIENTE GENERAL').toUpperCase()}</p>
-                          {sale.cliente_dni && <p className="text-[9px] font-bold" style={{ color: '#5A5A5A' }}>DNI: {sale.cliente_dni}</p>}
+                          <p className="text-[10.5px] font-bold text-white">{(sale.cliente_nombre || 'CLIENTE GENERAL').toUpperCase()}</p>
+                          {sale.cliente_dni && <p className="text-[10.5px] font-bold" style={{ color: '#5A5A5A' }}>DNI: {sale.cliente_dni}</p>}
                         </td>
                         <td className="px-3 py-2.5">
-                          <span className="text-[7px] font-black px-1.5 py-0.5 rounded" style={{ background: '#1A1A2E', color: '#8B5CF6' }}>
+                          <span className="text-[8.5px] font-black px-1.5 py-0.5 rounded" style={{ background: '#1A1A2E', color: '#8B5CF6' }}>
                             {TIPO_LABELS[sale.tipo_documento] || 'Boleta'} {sale.serie}-{sale.numero}
                           </span>
                         </td>
                         <td className="px-3 py-2.5 text-right">
-                          <span className="text-[10px] font-black" style={{ color: '#10B981' }}>{formatCurrency(sale.total)}</span>
+                          <span className="text-[11.5px] font-black" style={{ color: '#10B981' }}>{formatCurrency(sale.total)}</span>
                         </td>
                         <td className="px-3 py-2.5 text-center">
-                          <span className="text-[7px] font-black px-2 py-0.5 rounded-full uppercase" style={{ background: es.bg, color: es.color }}>
+                          <span className="text-[8.5px] font-black px-2 py-0.5 rounded-full uppercase" style={{ background: es.bg, color: es.color }}>
                             {es.label}
                           </span>
                         </td>
                         <td className="px-3 py-2.5 text-center">
                           {synced ? (
-                            <span className="flex items-center justify-center gap-1 text-[7px] font-bold" style={{ color: '#10B981' }}>
+                            <span className="flex items-center justify-center gap-1 text-[8.5px] font-bold" style={{ color: '#10B981' }}>
                               <CheckCircle2 size={10} /> SICCE
                             </span>
                           ) : (
-                            <span className="flex items-center justify-center gap-1 text-[7px] font-bold" style={{ color: '#F59E0B' }}>
+                            <span className="flex items-center justify-center gap-1 text-[8.5px] font-bold" style={{ color: '#F59E0B' }}>
                               <AlertCircle size={10} /> Pend.
                             </span>
                           )}
@@ -525,17 +525,17 @@ export default function SalesHistory() {
                                   <div className="fixed inset-0 z-10" onClick={() => setActionMenuId(null)} />
                                   <div className="absolute right-0 top-full mt-1 z-20 w-44 rounded-xl border overflow-hidden" style={{ background: '#1A1A1D', borderColor: '#2A2A2E' }}>
                                     <button onClick={() => { setDetailSale(sale); setActionMenuId(null) }}
-                                      className="w-full text-left px-3 py-2.5 text-[9px] font-bold transition-all hover:bg-white/5 flex items-center gap-2"
+                                      className="w-full text-left px-3 py-2.5 text-[10.5px] font-bold transition-all hover:bg-white/5 flex items-center gap-2"
                                       style={{ color: '#CCC', borderBottom: '1px solid #2A2A2E' }}>
                                       <Eye size={11} /> Ver detalle
                                     </button>
                                     <button onClick={() => { /* TODO: reimprimir ticket */ setActionMenuId(null) }}
-                                      className="w-full text-left px-3 py-2.5 text-[9px] font-bold transition-all hover:bg-white/5 flex items-center gap-2"
+                                      className="w-full text-left px-3 py-2.5 text-[10.5px] font-bold transition-all hover:bg-white/5 flex items-center gap-2"
                                       style={{ color: '#CCC', borderBottom: '1px solid #2A2A2E' }}>
                                       <Printer size={11} /> Reimprimir ticket
                                     </button>
                                     <button onClick={async () => { setActionMenuId(null); if (!confirm('Anular esta venta?')) return; try { await salesApi.update(sale._id, { estado: 'ANULADO' }); queryClient.invalidateQueries(['salesList']) } catch {} }}
-                                      className="w-full text-left px-3 py-2.5 text-[9px] font-bold transition-all hover:bg-white/5 flex items-center gap-2"
+                                      className="w-full text-left px-3 py-2.5 text-[10.5px] font-bold transition-all hover:bg-white/5 flex items-center gap-2"
                                       style={{ color: '#EF4444' }}>
                                       <Ban size={11} /> Anular venta
                                     </button>
@@ -553,7 +553,7 @@ export default function SalesHistory() {
             </div>
             {/* Pagination */}
             <div className="border-t px-4 py-2 flex items-center justify-between" style={{ borderColor: '#2A2A2E' }}>
-              <p className="text-[8px] font-bold" style={{ color: '#5A5A5A' }}>
+              <p className="text-[9.5px] font-bold" style={{ color: '#5A5A5A' }}>
                 Mostrando {data?.total ? Math.min((page - 1) * limit + 1, data.total) : 0} a {Math.min(page * limit, data?.total || 0)} de {data?.total || 0} ventas
               </p>
               <div className="flex items-center gap-1">
@@ -567,16 +567,16 @@ export default function SalesHistory() {
                   if (p > (data?.pages || 1)) return null
                   return (
                     <button key={p} onClick={() => setPage(p)}
-                      className="w-6 h-6 rounded text-[9px] font-bold transition-all"
+                      className="w-6 h-6 rounded text-[10.5px] font-bold transition-all"
                       style={{ background: p === page ? '#F56B13' : 'transparent', color: p === page ? '#FFF' : '#5A5A5A' }}>
                       {p}
                     </button>
                   )
                 })}
-                {data && data.pages > 5 && <span className="text-[8px] font-bold px-1" style={{ color: '#5A5A5A' }}>...</span>}
+                {data && data.pages > 5 && <span className="text-[9.5px] font-bold px-1" style={{ color: '#5A5A5A' }}>...</span>}
                 {data && data.pages > 5 && (
                   <button onClick={() => setPage(data.pages)}
-                    className="w-6 h-6 rounded text-[9px] font-bold transition-all"
+                    className="w-6 h-6 rounded text-[10.5px] font-bold transition-all"
                     style={{ background: page === data.pages ? '#F56B13' : 'transparent', color: page === data.pages ? '#FFF' : '#5A5A5A' }}>
                     {data.pages}
                   </button>
@@ -587,7 +587,7 @@ export default function SalesHistory() {
                 </button>
               </div>
               <select value={limit} onChange={e => { setLimit(Number(e.target.value)); setPage(1) }}
-                className="text-[8px] font-bold px-2 py-1 rounded border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B', color: '#8A8A8A' }}>
+                className="text-[9.5px] font-bold px-2 py-1 rounded border bg-transparent text-white outline-none cursor-pointer" style={{ borderColor: '#2A2A2E', background: '#18181B', color: '#8A8A8A' }}>
                 <option value={8}>8 por pagina</option>
                 <option value={15}>15 por pagina</option>
                 <option value={25}>25 por pagina</option>
@@ -601,17 +601,17 @@ export default function SalesHistory() {
         <div className="w-[280px] flex flex-col gap-3 shrink-0 overflow-y-auto">
           <div className="rounded-xl border p-4" style={{ background: '#111113', borderColor: '#2A2A2E' }}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-[10px] font-black uppercase tracking-wider" style={{ color: '#8A8A8A' }}>Resumen por Periodo</h3>
-              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: '#1A1A1D', color: '#F56B13' }}>Hoy</span>
+              <h3 className="text-[11.5px] font-black uppercase tracking-wider" style={{ color: '#8A8A8A' }}>Resumen por Periodo</h3>
+              <span className="text-[10.5px] font-bold px-1.5 py-0.5 rounded" style={{ background: '#1A1A1D', color: '#F56B13' }}>Hoy</span>
             </div>
             <DonutChart breakdown={breakdown} />
           </div>
           <div className="rounded-xl border p-4" style={{ background: '#111113', borderColor: '#2A2A2E' }}>
-            <h3 className="text-[10px] font-black uppercase tracking-wider mb-3" style={{ color: '#8A8A8A' }}>Ventas por Hora</h3>
+            <h3 className="text-[11.5px] font-black uppercase tracking-wider mb-3" style={{ color: '#8A8A8A' }}>Ventas por Hora</h3>
             <HourlyChart hourly={hourlyData?.hourly} />
           </div>
           <div className="rounded-xl border p-4" style={{ background: '#111113', borderColor: '#2A2A2E' }}>
-            <h3 className="text-[10px] font-black uppercase tracking-wider mb-3" style={{ color: '#8A8A8A' }}>Acciones Rapidas</h3>
+            <h3 className="text-[11.5px] font-black uppercase tracking-wider mb-3" style={{ color: '#8A8A8A' }}>Acciones Rapidas</h3>
             <div className="space-y-2">
               {[
                 { label: 'Reporte de Ventas', sub: 'Ver reporte detallado', icon: BarChart3, color: '#F56B13', action: () => navigate('/reportes') },
@@ -635,8 +635,8 @@ export default function SalesHistory() {
                       <Icon size={13} style={{ color: a.color }} />
                     </div>
                     <div>
-                      <p className="text-[11px] font-bold text-white">{a.label}</p>
-                      <p className="text-[9px] font-bold" style={{ color: '#5A5A5A' }}>{a.sub}</p>
+                      <p className="text-[12.5px] font-bold text-white">{a.label}</p>
+                      <p className="text-[10.5px] font-bold" style={{ color: '#5A5A5A' }}>{a.sub}</p>
                     </div>
                   </button>
                 )
@@ -652,10 +652,10 @@ export default function SalesHistory() {
           <div className="rounded-xl border p-5 w-[440px] max-h-[80vh] overflow-y-auto" style={{ background: '#111113', borderColor: '#2A2A2E' }}
             onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[10px] font-black text-white uppercase tracking-wider">Detalle de Venta</h3>
+              <h3 className="text-[11.5px] font-black text-white uppercase tracking-wider">Detalle de Venta</h3>
               <button onClick={() => setDetailSale(null)} className="p-1 rounded hover:bg-white/5"><X size={14} style={{ color: '#8A8A8A' }} /></button>
             </div>
-            <div className="space-y-3 text-[10px]">
+            <div className="space-y-3 text-[11.5px]">
               <div className="flex justify-between"><span style={{ color: '#5A5A5A' }}>N° Venta</span><span className="font-bold text-white" style={{ color: '#F56B13' }}>VTA-{String(detailSale.correlativo).padStart(7, '0')}</span></div>
               <div className="flex justify-between"><span style={{ color: '#5A5A5A' }}>Fecha / Hora</span><span className="font-bold text-white">{formatDate(detailSale.fecha_emision)} {detailSale.creado_en ? formatTime(new Date(detailSale.creado_en)) : ''}</span></div>
               <div className="flex justify-between"><span style={{ color: '#5A5A5A' }}>Tienda</span><span className="font-bold text-white">{detailSale.punto_venta || '-'}</span></div>
@@ -668,17 +668,17 @@ export default function SalesHistory() {
               <div className="flex justify-between"><span style={{ color: '#5A5A5A' }}>Sync SICCE</span><span className="font-bold text-white">{detailSale.sync?.sicce ? 'Sincronizado' : 'Pendiente'}</span></div>
             </div>
             <div className="mt-4 pt-3 border-t" style={{ borderColor: '#2A2A2E' }}>
-              <p className="text-[9px] font-bold uppercase tracking-wider mb-2" style={{ color: '#5A5A5A' }}>Productos</p>
+              <p className="text-[10.5px] font-bold uppercase tracking-wider mb-2" style={{ color: '#5A5A5A' }}>Productos</p>
               {detailSale.items?.map((item, i) => (
-                <div key={i} className="flex justify-between text-[10px] py-1">
+                <div key={i} className="flex justify-between text-[11.5px] py-1">
                   <span style={{ color: '#CCC' }}>{item.descripcion} <span style={{ color: '#5A5A5A' }}>x{item.cantidad}</span></span>
                   <span className="font-bold text-white">S/ {Number(item.total_item).toFixed(2)}</span>
                 </div>
               ))}
             </div>
             <div className="mt-3 pt-3 border-t space-y-1" style={{ borderColor: '#2A2A2E' }}>
-              <div className="flex justify-between text-[10px]"><span style={{ color: '#5A5A5A' }}>Subtotal</span><span className="text-white">S/ {Number(detailSale.subtotal).toFixed(2)}</span></div>
-              <div className="flex justify-between text-[10px]"><span style={{ color: '#5A5A5A' }}>IGV (18%)</span><span className="text-white">S/ {Number(detailSale.igv).toFixed(2)}</span></div>
+              <div className="flex justify-between text-[11.5px]"><span style={{ color: '#5A5A5A' }}>Subtotal</span><span className="text-white">S/ {Number(detailSale.subtotal).toFixed(2)}</span></div>
+              <div className="flex justify-between text-[11.5px]"><span style={{ color: '#5A5A5A' }}>IGV (18%)</span><span className="text-white">S/ {Number(detailSale.igv).toFixed(2)}</span></div>
               <div className="flex justify-between text-sm pt-1 border-t" style={{ borderColor: '#2A2A2E' }}>
                 <span className="font-black text-white">TOTAL</span>
                 <span className="font-black" style={{ color: '#10B981' }}>S/ {Number(detailSale.total).toFixed(2)}</span>
@@ -694,23 +694,23 @@ export default function SalesHistory() {
           <div className="rounded-xl border p-5 w-[440px] max-h-[80vh] overflow-y-auto" style={{ background: '#111113', borderColor: '#2A2A2E' }}
             onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[10px] font-black text-white uppercase tracking-wider">Top 10 Productos mas Vendidos</h3>
+              <h3 className="text-[11.5px] font-black text-white uppercase tracking-wider">Top 10 Productos mas Vendidos</h3>
               <button onClick={() => setShowTopProducts(false)} className="p-1 rounded hover:bg-white/5"><X size={14} style={{ color: '#8A8A8A' }} /></button>
             </div>
             {!topProductsData ? (
-              <p className="text-[10px] font-bold py-8 text-center" style={{ color: '#5A5A5A' }}>Cargando...</p>
+              <p className="text-[11.5px] font-bold py-8 text-center" style={{ color: '#5A5A5A' }}>Cargando...</p>
             ) : topProductsData.length === 0 ? (
-              <p className="text-[10px] font-bold py-8 text-center" style={{ color: '#5A5A5A' }}>Sin datos de productos vendidos</p>
+              <p className="text-[11.5px] font-bold py-8 text-center" style={{ color: '#5A5A5A' }}>Sin datos de productos vendidos</p>
             ) : (
               <div className="space-y-2">
                 {topProductsData.map((p, i) => (
                   <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg" style={{ background: 'rgba(26,26,29,0.5)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span className="text-[11px] font-black w-5 text-center" style={{ color: '#F56B13' }}>#{i+1}</span>
+                    <span className="text-[12.5px] font-black w-5 text-center" style={{ color: '#F56B13' }}>#{i+1}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[11px] font-bold text-white truncate">{p.producto}</p>
-                      <p className="text-[9px]" style={{ color: '#5A5A5A' }}>{p.cantidad} unidades</p>
+                      <p className="text-[12.5px] font-bold text-white truncate">{p.producto}</p>
+                      <p className="text-[10.5px]" style={{ color: '#5A5A5A' }}>{p.cantidad} unidades</p>
                     </div>
-                    <span className="text-[11px] font-black" style={{ color: '#10B981' }}>{formatCurrency(p.total)}</span>
+                    <span className="text-[12.5px] font-black" style={{ color: '#10B981' }}>{formatCurrency(p.total)}</span>
                   </div>
                 ))}
               </div>
@@ -723,29 +723,29 @@ export default function SalesHistory() {
       {showDateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)' }}>
           <div className="rounded-xl border p-5 w-[320px]" style={{ background: '#111113', borderColor: '#2A2A2E' }}>
-            <h3 className="text-[10px] font-black text-white uppercase tracking-wider mb-4">Enviar por fecha</h3>
+            <h3 className="text-[11.5px] font-black text-white uppercase tracking-wider mb-4">Enviar por fecha</h3>
             <div className="space-y-3">
               <div>
-                <p className="text-[8px] font-bold mb-1" style={{ color: '#5A5A5A' }}>Desde</p>
+                <p className="text-[9.5px] font-bold mb-1" style={{ color: '#5A5A5A' }}>Desde</p>
                 <input type="date" value={syncFecha.desde} onChange={e => setSyncFecha(f => ({...f, desde: e.target.value}))}
-                  className="w-full text-[9px] px-3 py-2 rounded-lg border bg-transparent text-white outline-none" style={{ borderColor: '#2A2A2E', colorScheme: 'dark' }} />
+                  className="w-full text-[10.5px] px-3 py-2 rounded-lg border bg-transparent text-white outline-none" style={{ borderColor: '#2A2A2E', colorScheme: 'dark' }} />
               </div>
               <div>
-                <p className="text-[8px] font-bold mb-1" style={{ color: '#5A5A5A' }}>Hasta</p>
+                <p className="text-[9.5px] font-bold mb-1" style={{ color: '#5A5A5A' }}>Hasta</p>
                 <input type="date" value={syncFecha.hasta} onChange={e => setSyncFecha(f => ({...f, hasta: e.target.value}))}
-                  className="w-full text-[9px] px-3 py-2 rounded-lg border bg-transparent text-white outline-none" style={{ borderColor: '#2A2A2E', colorScheme: 'dark' }} />
+                  className="w-full text-[10.5px] px-3 py-2 rounded-lg border bg-transparent text-white outline-none" style={{ borderColor: '#2A2A2E', colorScheme: 'dark' }} />
               </div>
               <div>
-                <p className="text-[8px] font-bold mb-1" style={{ color: '#5A5A5A' }}>Paginas (max 10)</p>
+                <p className="text-[9.5px] font-bold mb-1" style={{ color: '#5A5A5A' }}>Paginas (max 10)</p>
                 <input type="number" min={1} max={10} value={paginasInput} onChange={e => setPaginasInput(Math.min(10, Math.max(1, Number(e.target.value) || 1)))}
-                  className="w-full text-[9px] px-3 py-2 rounded-lg border bg-transparent text-white outline-none" style={{ borderColor: '#2A2A2E' }} />
+                  className="w-full text-[10.5px] px-3 py-2 rounded-lg border bg-transparent text-white outline-none" style={{ borderColor: '#2A2A2E' }} />
               </div>
             </div>
             <div className="flex items-center justify-end gap-2 mt-4">
-              <button onClick={() => setShowDateModal(false)} className="text-[8px] font-bold px-3 py-1.5 rounded-lg border hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
+              <button onClick={() => setShowDateModal(false)} className="text-[9.5px] font-bold px-3 py-1.5 rounded-lg border hover:bg-white/5 transition-all" style={{ borderColor: '#2A2A2E', color: '#8A8A8A' }}>
                 Cancelar
               </button>
-              <button onClick={() => handleExport('fecha')} className="text-[8px] font-bold px-3 py-1.5 rounded-lg transition-all" style={{ background: '#F56B13', color: '#FFF' }}>
+              <button onClick={() => handleExport('fecha')} className="text-[9.5px] font-bold px-3 py-1.5 rounded-lg transition-all" style={{ background: '#F56B13', color: '#FFF' }}>
                 Enviar a SICCE
               </button>
             </div>

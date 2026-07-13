@@ -177,6 +177,117 @@ export async function getSalesStatusBreakdown(req, res) {
   } catch (err) { res.status(500).json({ message: err.message }); }
 }
 
+export async function createQuotation(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Sale = db.model('Sale');
+    const { items, cliente_nombre, cliente_dni, total, validez = 7 } = req.body;
+    if (!items || items.length === 0) return res.status(400).json({ message: 'Debe agregar al menos un ítem' });
+    const count = await Sale.countDocuments({ company_id: req.company_id, tipo_documento: 'COT' });
+    const correlativo = count + 1;
+    const subtotal = items.reduce((acc, it) => acc + (it.total_item || it.cantidad * it.precio_unitario), 0);
+    const igv = subtotal * 0.18;
+    const totalFinal = total || subtotal + igv;
+    const fechaEmision = new Date().toISOString().split('T')[0];
+    const fechaExpiracion = new Date(Date.now() + validez * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    const quotation = await Sale.create({
+      correlativo,
+      tipo_documento: 'COT',
+      serie: 'COT',
+      numero: String(correlativo).padStart(6, '0'),
+      cliente_nombre,
+      cliente_dni,
+      fecha_emision: fechaEmision,
+      fecha_expiracion: fechaExpiracion,
+      validez,
+      subtotal,
+      igv,
+      total: totalFinal,
+      estado: 'COTIZACION',
+      items: items.map(it => ({
+        ...it,
+        descripcion: it.descripcion?.toUpperCase(),
+        total_item: it.total_item || it.cantidad * it.precio_unitario
+      })),
+      company_id: req.company_id,
+      registrado_por: req.user?.id,
+      origen: 'sigp',
+      punto_venta: req.body.punto_venta || 'POS-SIGP'
+    });
+    res.status(201).json(quotation);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
+export async function getQuotations(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Sale = db.model('Sale');
+    const { page = 1, limit = 10, fecha_desde, fecha_hasta, q } = req.query;
+    const filter = { company_id: req.company_id, tipo_documento: 'COT' };
+    if (fecha_desde || fecha_hasta) {
+      filter.fecha_emision = {};
+      if (fecha_desde) filter.fecha_emision.$gte = fecha_desde;
+      if (fecha_hasta) filter.fecha_emision.$lte = fecha_hasta;
+    }
+    if (q) {
+      filter.$or = [
+        { cliente_nombre: { $regex: q, $options: 'i' } },
+        { cliente_dni: { $regex: q, $options: 'i' } },
+        { numero: { $regex: q, $options: 'i' } }
+      ];
+    }
+    const skip = (Number(page) - 1) * Number(limit);
+    const [quotations, total] = await Promise.all([
+      Sale.find(filter).skip(skip).limit(Number(limit)).sort({ creado_en: -1 }),
+      Sale.countDocuments(filter)
+    ]);
+    res.json({ quotations, total, page: Number(page), pages: Math.ceil(total / Number(limit)) });
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
+export async function convertQuotationToSale(req, res) {
+  try {
+    const db = getTenantDb(req.company_id);
+    const Sale = db.model('Sale');
+    const Product = db.model('Product');
+    const quotation = await Sale.findOne({ _id: req.params.id, company_id: req.company_id, tipo_documento: 'COT' });
+    if (!quotation) return res.status(404).json({ message: 'Cotización no encontrada' });
+    if (quotation.estado !== 'COTIZACION') return res.status(400).json({ message: 'La cotización ya fue convertida o anulada' });
+
+    const count = await Sale.countDocuments({ company_id: req.company_id, tipo_documento: { $ne: 'COT' } });
+    const correlativo = count + 1;
+    for (const item of quotation.items) {
+      if (item.producto_id) await Product.findByIdAndUpdate(item.producto_id, { $inc: { stock_actual: -item.cantidad } });
+    }
+
+    const sale = await Sale.create({
+      correlativo,
+      tipo_documento: '03',
+      serie: 'B001',
+      numero: String(correlativo).padStart(6, '0'),
+      cliente_nombre: quotation.cliente_nombre,
+      cliente_dni: quotation.cliente_dni,
+      fecha_emision: new Date().toISOString().split('T')[0],
+      subtotal: quotation.subtotal,
+      igv: quotation.igv,
+      total: quotation.total,
+      estado: 'COMPLETADO',
+      metodo_pago: req.body.metodo_pago || 'EFECTIVO',
+      items: quotation.items,
+      company_id: req.company_id,
+      registrado_por: req.user?.id,
+      origen: 'sigp',
+      punto_venta: quotation.punto_venta
+    });
+
+    quotation.estado = 'COMPLETADO';
+    await quotation.save();
+
+    res.status(201).json(sale);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+}
+
 export async function getSalesHourly(req, res) {
   try {
     const db = getTenantDb(req.company_id);

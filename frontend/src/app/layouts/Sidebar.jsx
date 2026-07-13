@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Package, Users, ShoppingCart, CreditCard, BarChart3, Truck, ClipboardList, Settings, ChevronDown, MapPin, Menu } from 'lucide-react'
+import { Package, Users, ShoppingCart, CreditCard, BarChart3, Truck, ClipboardList, ChevronDown, MapPin, Menu } from 'lucide-react'
 import { useAuthStore } from '../../app/store/authStore'
 import { useUIStore } from '../../app/store/uiStore'
 import { useState } from 'react'
@@ -15,7 +15,6 @@ const NAV = [
   { id: 'compras', label: 'Compras', icon: ClipboardList, path: '/compras' },
   { id: 'caja', label: 'Caja', icon: CreditCard, path: '/caja' },
   { id: 'reportes', label: 'Reportes', icon: BarChart3, path: '/reportes' },
-  { id: 'configuracion', label: 'Configuracion', icon: Settings, path: '/configuracion' },
 ]
 
 export default function Sidebar() {

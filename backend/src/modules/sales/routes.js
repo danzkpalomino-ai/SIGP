@@ -15,4 +15,8 @@ router.get('/status-breakdown', ctrl.getSalesStatusBreakdown);
 router.get('/hourly', ctrl.getSalesHourly);
 router.put('/:id', ctrl.updateSale);
 
+router.post('/quotations', ctrl.createQuotation);
+router.get('/quotations', ctrl.getQuotations);
+router.put('/quotations/:id/convert', ctrl.convertQuotationToSale);
+
 export default router;
